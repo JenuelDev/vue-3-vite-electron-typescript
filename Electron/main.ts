@@ -1,4 +1,4 @@
-import { app, BrowserWindow, BrowserWindowConstructorOptions, screen } from "electron";
+import { app, BrowserWindow, BrowserWindowConstructorOptions, ipcMain, screen } from "electron";
 import path from "path";
 import { isDev } from "./config";
 import { appConfig } from "./ElectronStore/Configuration";
@@ -44,6 +44,17 @@ async function createWindow() {
     if (isDev) {
         mainWindow.webContents.openDevTools();
     }
+
+
+    ipcMain.handle('versions', () => {
+        return {
+            node: process.versions.chrome,
+            chrome: process.versions.chrome,
+            electron: process.versions.electron,
+            version: app.getVersion(),
+            name: app.getName(),
+        };
+    });
 }
 
 // This method will be called when Electron has finished
